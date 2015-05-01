@@ -20,4 +20,4 @@ Usage
 
 Dayum
 --------------
-![Howdy](http://pioverfour.tumblr.com/post/117799457321/console-3d-viewer)
+![alt text](http://38.media.tumblr.com/abb28dd3fa214ac379f2d986d4f5dc61/tumblr_nnn23s3MFV1tuj1kso1_1280.gif)
