@@ -1,3 +1,20 @@
+#terminal_renderer [file]
+
+import argparse
+parser = argparse.ArgumentParser(description="Render a 3D scene in the console")
+parser.add_argument("files", metavar='FILE', nargs='*', help="files to render")
+
+parser.add_argument("-rx", "--resolutionX", type=int, help="number of rows")
+parser.add_argument("-ry", "--resolutionY", type=int, help="number of columns")
+args = vars(parser.parse_args())
+
+for arg in args:
+    print(arg, args[arg])
+
+# import sys
+# sys.exit()
+
+
 try:
     import curses
     fallback = False
@@ -7,6 +24,7 @@ except:
 from math import sin, cos, pi
 import time
 import json
+
 
 DEBUG = False
 
@@ -296,28 +314,19 @@ if __name__ == '__main__':
 #    e = [[2, 0], [0, 1], [1, 2], [5, 1], [0, 5], [3, 0], [2, 3], [4, 0], [3, 4], [4, 5], [10, 1], [5, 10], [6, 2], [1, 6], [7, 3], [2, 7], [8, 4], [3, 8], [9, 5], [4, 9], [10, 6], [6, 7], [7, 8], [8, 9], [9, 10], [11, 6], [10, 11], [11, 7], [11, 8], [11, 9]]
 #    cube.from_list(v, e)
 
-    import sys
     import os
-    
-    argv = sys.argv
-    
-    if '--' in argv:
-        dash_index = argv.index('--')
-        argv = argv[dash_index:]
-        for arg in argv[1:]:
-            if os.path.exists(arg):
+
+    if len(args['files']) != 0:
+        for f in args['files']:
+            if os.path.exists(f):
                 try:
-                    object = Mesh.from_file(arg)
+                    object = Mesh.from_file(f)
                     renderer.scene.append(object)
                 except:
                     pass
-    
     else:
         object = Mesh.from_list(v, e)
         renderer.scene.append(object)
-
-#    cube = Mesh.from_file('/home/damien/PROG/terminal_renderer/dodecaedre.json')
-
     
     angle = 0
     while True:
