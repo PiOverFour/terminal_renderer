@@ -294,7 +294,11 @@ if __name__ == '__main__':
     if DEBUG:
         print('-----------------')
     
-    res = [40,80]
+    # if len(args['resolutionY']) != 0:
+    rx = args['resolutionX'] if args['resolutionX'] else 40
+    ry = args['resolutionY'] if args['resolutionY'] else 80
+
+    res = [rx,ry]
     if fallback:
         renderer = RendererFallback(res)
     else:
