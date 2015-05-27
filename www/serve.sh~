@@ -1,0 +1,2 @@
+source ~/damenv/bin/activate
+python -m http.server
