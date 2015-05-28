@@ -226,8 +226,7 @@ Renderer.prototype = {
 
         var display_edge = [];
         
-        // console.log("edge: " , edge);
-        // console.log(edge);
+        // console.log("edge: " + edge);
 
         for (var p=0; p<2; p++) {
 
@@ -246,33 +245,33 @@ Renderer.prototype = {
         
         // console.log("display edge: " + display_edge);
 
-        var vector = [];
+        var direction_vector = [];
 
         for (var i = 0; i < display_edge[0].length; i++) {
 
-            vector.push(display_edge[0][i] - display_edge[1][i]);
+            direction_vector.push(display_edge[0][i] - display_edge[1][i]);
 
         }
 
-        // console.log("vector: " + vector);
+        // console.log("direction_vector: " + direction_vector);
 
-        // vector = list(map(lambda c0,c1:c1-c0, display_edge[0], display_edge[1]))
+        // direction_vector = list(map(lambda c0,c1:c1-c0, display_edge[0], display_edge[1]))
         
-        var real_slope = (vector[0] != 0) ? vector[1]/vector[0] : 3;
+        var real_slope = (direction_vector[0] != 0) ? direction_vector[1]/direction_vector[0] : 3;
 
         // console.log("real_slope: " + real_slope);
 
-        if (-0.3 <= real_slope < 0.3 ) {
+        if (-0.3 <= real_slope && real_slope < 0.3 ) {
 
             draw_char = "-";
         }
 
-        else if (-2 <= real_slope < -0.3) {
+        else if (-2 <= real_slope && real_slope < -0.3) {
 
             draw_char = "/";
 
         }
-        else if (0.3 <= real_slope < 2) {
+        else if (0.3 <= real_slope && real_slope < 2) {
 
             draw_char = "\\";
 
@@ -291,36 +290,41 @@ Renderer.prototype = {
          // console.log("draw_char: " + draw_char);
 
         // if DEBUG:
-        //     print('vector',vector)
+        //     print('direction_vector',direction_vector)
         
-        var largest = Math.max(Math.abs(vector[0]), Math.abs(vector[1]));
+        var largest = Math.max(Math.abs(direction_vector[0]), Math.abs(direction_vector[1]));
 
-        if (largest in vector) {
+        // console.log("largest: " + largest);
 
-            largest = vector.indexOf(largest);
+        var present = direction_vector.indexOf(largest);
+
+        if (present == -1) {
+
+            largest = direction_vector.indexOf(-largest);
 
         }
+
         else {
 
-            largest = vector.indexOf(-largest);
+            largest = present;
 
         }
         var smallest = Math.abs(largest-1);
         
-        if (vector[largest] < 0) {
+        if (direction_vector[largest] > 0) {
 
             display_edge.reverse()
 
         }
 
+
+        var slope = (direction_vector[largest] != 0) ? (direction_vector[smallest]/direction_vector[largest]) : 0;
+        
         // console.log("display edge: " + display_edge);
-
-        // if DEBUG:
-        //     print('largest:', largest, 'smallest:', smallest)
-
-        var slope = (vector[largest] != 0) ? (vector[smallest])/vector[largest] : 0;
-        // if DEBUG:
-        //     print("slope:", slope)
+        // console.log("largest: " + largest);
+        // console.log("direction_vector: " + direction_vector);
+        // console.log("smallest: " + smallest);
+        // console.log("slope: " + slope);
 
         var display_points = [];
 
@@ -340,6 +344,7 @@ Renderer.prototype = {
             display_points.push(point);
 
         }
+        // console.log("display_points: " + display_points);
 
 
         return display_points;
@@ -367,7 +372,7 @@ Renderer.prototype = {
 
     draw: function(display_point) {
 
-        this.cContext.fillText(display_point[2],display_point[0],display_point[1]*1.5);
+        this.cContext.fillText(display_point[2],display_point[0]*8,display_point[1]*12);
     },
 
     render: function(camera) {
@@ -404,9 +409,9 @@ Renderer.prototype = {
 
         for (e in camera_edges) {
 
-            console.log(' ');
+            // console.log(' ');
 
-            // console.log("camera_edges " + e + ":" + (camera_edges[e]));
+            // console.log("camera_edge " + e + ":" + (camera_edges[e]));
 
             var display_points = this.camera_to_display(camera_edges[e])
             
@@ -431,7 +436,7 @@ Renderer.prototype = {
 window.onload = function() {
 
     var canvas = document.getElementById( "screen" );
-    renderer = new Renderer(canvas, [100,100]);
+    renderer = new Renderer(canvas, [80,120]);
 
     loadJSON('dino.json', function(response) {
         var obj = JSON.parse(response);
@@ -441,14 +446,14 @@ window.onload = function() {
         object = object.from_data(obj);
         renderer.scene.push(object);
         
-        var angle = 0.2;
+        var angle = 0.0;
 
         var inter = setInterval( function() {
-            var camera = new Camera([Math.cos(angle)*3, 0, Math.sin(angle)*3], [Math.PI/2-angle, 0, Math.PI/2], 5);
+            var camera = new Camera([Math.cos(angle)*5, 0, Math.sin(angle)*5], [Math.PI/2-angle, 0, Math.PI/2], 3);
             renderer.render(camera);
             angle += Math.PI/40;
 
-            clearInterval(inter);   //DEBUG
+            // clearInterval(inter);   //DEBUG
 
         }, 100)
 
