@@ -134,7 +134,7 @@ Mesh.prototype = {
 
 }
 
-var Camera = function (position, rotation, focal_length=5) {
+var Camera = function (position, rotation, focal_length) {
 
     this.position = position;
     this.rotation = rotation;
@@ -183,19 +183,19 @@ var Camera = function (position, rotation, focal_length=5) {
 //         super(Camera, self).__init__(position, rotation)
 //         self.focal_length = focal_length
 
-var Renderer = function(canvas, resolution=[30,30]) {
+var Renderer = function(canvas, resolution) {
     this.resolution = resolution;
     this.scene = [];
 
     this.canvas = canvas;
     this.cContext = this.canvas.getContext("2d");
     // this.canvas = document.createElement( 'canvas' );
-    var text = ['123456','789 ds dfs','789 ds dfs','789 ds dfs'];
+    // var text = ['123456','789 ds dfs','789 ds dfs','789 ds dfs'];
+    // this.cContext.font = "bold 10px Mono";
 
-    for (l in text) {
-        this.cContext.font = "10px Mono";
-        this.cContext.fillText(text[l],10,(l+6)*1.5);
-        };
+    // for (l in text) {
+    //     this.cContext.fillText(text[l],10,(l+6)*1.5);
+    //     };
 }
 
 Renderer.prototype = {
@@ -232,8 +232,9 @@ Renderer.prototype = {
 
             var dp = [];
             for (var c=0; c<edge[p].length; c++) {
-                edge[p][c] += 1;
-                edge[p][c] *= (0.5 * this.resolution[c]);
+                // edge[p][c] += 1;
+                edge[p][c] *= (this.resolution[c]);
+                edge[p][c] += (this.resolution[c]);
                 edge[p][c] = Math.round(edge[p][c])
                 dp.push(edge[p][c])
             }
@@ -263,7 +264,7 @@ Renderer.prototype = {
 
         if (-0.3 <= real_slope && real_slope < 0.3 ) {
 
-            draw_char = "-";
+            draw_char = "–";
         }
 
         else if (-2 <= real_slope && real_slope < -0.3) {
@@ -436,7 +437,7 @@ Renderer.prototype = {
 window.onload = function() {
 
     var canvas = document.getElementById( "screen" );
-    renderer = new Renderer(canvas, [80,120]);
+    renderer = new Renderer(canvas, [40,60]);
 
     loadJSON('dino.json', function(response) {
         var obj = JSON.parse(response);
@@ -455,7 +456,7 @@ window.onload = function() {
 
             // clearInterval(inter);   //DEBUG
 
-        }, 100)
+        }, 40)
 
 
 
